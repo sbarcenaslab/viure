@@ -1,19 +1,18 @@
-import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet} from 'react-native';
 import {
   ViroARScene,
   ViroText,
   ViroConstants,
-  ViroARSceneNavigator
+  ViroARSceneNavigator,
 } from '@viro-community/react-viro';
 
 class HelloWorldSceneAR extends Component {
-
   constructor(props) {
     super(props);
     // Set initial state here
     this.state = {
-      text : "Initializing AR..."
+      text: 'Initializing AR...',
     };
     // bind 'this' to functions
     this._onInitialized = this._onInitialized.bind(this);
@@ -21,8 +20,13 @@ class HelloWorldSceneAR extends Component {
 
   render() {
     return (
-      <ViroARScene onTrackingUpdated={this._onInitialized} >
-        <ViroText text={this.state.text} scale={[.5, .5, .5]} position={[0, 0, -1]} style={styles.helloWorldTextStyle} />
+      <ViroARScene onTrackingUpdated={this._onInitialized}>
+        <ViroText
+          text={this.state.text}
+          scale={[0.5, 0.5, 0.5]}
+          position={[0, 0, -1]}
+          style={styles.helloWorldTextStyle}
+        />
       </ViroARScene>
     );
   }
@@ -30,7 +34,7 @@ class HelloWorldSceneAR extends Component {
   _onInitialized(state, reason) {
     if (state == ViroConstants.TRACKING_NORMAL) {
       this.setState({
-        text : "Hello World!"
+        text: 'Hello World!',
       });
     } else if (state == ViroConstants.TRACKING_NONE) {
       // Handle loss of tracking
@@ -48,16 +52,16 @@ var styles = StyleSheet.create({
   },
 });
 
-export default class App extends React.Component{
-	render(){
-			return(
-				<ViroARSceneNavigator
-					autofocus={true}
-					initialScene={{
-						scene: HelloWorldSceneAR,
-					}}
-					style={{flex: 1}}
-				/>
-			);
-		}
+export default class App extends React.Component {
+  render() {
+    return (
+      <ViroARSceneNavigator
+        autofocus={true}
+        initialScene={{
+          scene: HelloWorldSceneAR,
+        }}
+        style={{flex: 1}}
+      />
+    );
+  }
 }
