@@ -10,9 +10,23 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@feathersjs/authentication-client": "^4.5.11",
+    "@feathersjs/feathers": "^4.5.11",
+    "@feathersjs/rest-client": "^4.5.11",
+    "@react-native-community/async-storage": "^1.12.1",
+    "@viro-community/react-viro": "2.20.2",
+    "create-react-class": "^15.7.0",
+    "deprecated-react-native-listview": "^0.0.7",
+    "lottie-react-native": "^4.0.2",
     "react": "16.13.1",
     "react-native": "0.63.4",
-    "@viro-community/react-viro": "2.20.2"
+    "react-native-modal": "^12.0.2",
+    "react-native-share": "^6.2.1",
+    "react-native-video": "^5.1.1",
+    "react-redux": "^7.2.4",
+    "react-timer-mixin": "^0.13.4",
+    "redux": "^4.1.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.12.10",
