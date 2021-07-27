@@ -25,10 +25,6 @@ const {width} = Dimensions.get('window');
 class FigmentListView extends Component {
   constructor(props) {
     super(props);
-
-    // The app was written before React-Native's Flatlist was ready for prime time
-    // ListView necessitates relying on componentWillReceiveProps, which since updating
-    // react-native dependency to v55.1 has started throwing these warnings
     YellowBox.ignoreWarnings([
       'Warning: componentWillUpdate is deprecated',
       'Warning: componentWillReceiveProps is deprecated',
@@ -78,7 +74,6 @@ class FigmentListView extends Component {
   }
 
   _renderListItem(data = {}, sectionid, rowId) {
-    console.info(data, sectionid, rowId);
     return (
       <View style={{marginLeft: 10}}>
         <ListViewItem

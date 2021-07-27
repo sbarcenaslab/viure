@@ -31,6 +31,13 @@ export function addPortalWithIndex(index) {
   };
 }
 
+export function _addAllModals(payload) {
+  return {
+    type: 'ADD_ALL_MODELS',
+    payload,
+  };
+}
+
 // action to remove Portal with given UUID from AR Scene
 export function removePortalWithUUID(uuid) {
   return {

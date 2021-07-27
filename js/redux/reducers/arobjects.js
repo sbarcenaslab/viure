@@ -7,6 +7,7 @@ const uuidv1 = require('uuid/v1');
 const initialState = {
   modelItems: {},
   portalItems: {},
+  allModels: [],
   effectItems: EffectData.getInitEffectArray(),
   postProcessEffects: EffectsConstants.EFFECT_NONE,
 };
@@ -90,9 +91,10 @@ function modifyLoadState(state = {}, action) {
 
 function arobjects(state = initialState, action) {
   switch (action.type) {
-    case 'ADD_NEW_MODEL':
+    case 'ADD_ALL_MODELS':
       return {
         ...state,
+        allModels: action.payload,
       };
     case 'ADD_MODEL':
       return {

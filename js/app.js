@@ -13,6 +13,7 @@ import {
   changeModelLoadState,
   changeItemClickState,
   displayUIScreen,
+  _addAllModals,
 } from './redux/actions';
 import TimerMixin from 'react-timer-mixin';
 import * as LoadingConstants from './redux/LoadingStateConstants';
@@ -26,7 +27,6 @@ import ShareScreenButton from './component/ShareScreenButtonComponent';
 import FigmentListView from './component/FigmentListView';
 import PhotosSelector from './component/PhotosSelector';
 import ARInitializationUI from './component/ARInitializationUI.js';
-import * as ModelData from './model/ModelItems';
 import InitialScene from './figment';
 const kObjSelectMode = 1;
 const kPreviewTypePhoto = 1;
@@ -109,15 +109,11 @@ export class App extends Component {
 
   async fetchObjects() {
     const {data} = await products.find();
-    this.setState({models: data});
+    this.props.addAllModels(data.map((el) => ({...el, position: [0, 0, 0]})));
   }
 
   componentDidMount() {
     this.fetchObjects();
-  }
-
-  componentDidUpdate() {
-    console.info(this.state.models);
   }
 
   render() {
@@ -880,7 +876,7 @@ export class App extends Component {
   // Load data source for listview based on listview modes
   _getListItems() {
     return this._constructListArrayModel(
-      ModelData.getModelArray(),
+      this.props.allModels,
       this.props.modelItems,
     );
   }
@@ -890,7 +886,7 @@ export class App extends Component {
     var listArrayModel = [];
     for (var i = 0; i < sourceArray.length; i++) {
       listArrayModel.push({
-        icon_img: sourceArray[i].icon_img,
+        icon_img: sourceArray[i]?.product_id_details.image,
         loading: this._getLoadingforModelIndex(i, items),
       });
     }
@@ -1085,6 +1081,7 @@ const localStyles = StyleSheet.create({
 // -- REDUX STORE
 function selectProps(store) {
   return {
+    allModels: store.arobjects.allModels,
     modelItems: store.arobjects.modelItems,
     portalItems: store.arobjects.portalItems,
     effectItems: store.arobjects.effectItems,
@@ -1099,6 +1096,7 @@ function selectProps(store) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    addAllModels: (data) => dispatch(_addAllModals(data)),
     dispatchAddPortal: (index) => dispatch(addPortalWithIndex(index)),
     dispatchRemovePortalWithUUID: (uuid) =>
       dispatch(removePortalWithUUID(uuid)),

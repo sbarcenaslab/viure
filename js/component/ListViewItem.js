@@ -26,7 +26,7 @@ class ListViewItem extends Component {
       <TouchableHighlight underlayColor="#00000000" onPress={this._onPress}>
         <View>
           <Animated.Image
-            source={this.props.stateImageArray[0]}
+            source={{uri: this.props.stateImageArray[0]}}
             style={[
               this.props.style,
               {

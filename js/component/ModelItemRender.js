@@ -2,10 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as LoadConstants from '../redux/LoadingStateConstants';
 import * as UIConstants from '../redux/UIConstants';
-import * as ModelData from '../model/ModelItems';
 import TimerMixin from 'react-timer-mixin';
-import ParticleEmitter from '../model/emitters/ParticleEmitter';
-import renderIf from '../helpers/renderIf';
 import {
   ViroMaterials,
   ViroNode,
@@ -13,6 +10,7 @@ import {
   ViroSpotLight,
   ViroQuad,
 } from '@viro-community/react-viro';
+import {connect} from 'react-redux';
 
 var createReactClass = require('create-react-class');
 
@@ -37,10 +35,10 @@ var ModelItemRender = createReactClass({
 
   getInitialState() {
     return {
-      scale: ModelData.getModelArray()[this.props.modelIDProps.index].scale,
+      scale: [1, 1, 1],
       rotation: [0, 0, 0],
       nodeIsVisible: false,
-      position: [0, 10, 1], // make it appear initially high in the sky
+      position: [0, 0, 0], // make it appear initially high in the sky
       shouldBillboard: true,
       runAnimation: true,
       showParticles: true,
@@ -49,7 +47,7 @@ var ModelItemRender = createReactClass({
   },
 
   render: function () {
-    var modelItem = ModelData.getModelArray()[this.props.modelIDProps.index];
+    var modelItem = this.props.allModels[this.props.modelIDProps.index];
     let transformBehaviors = {};
     if (this.state.shouldBillboard) {
       transformBehaviors.transformBehaviors = this.state.shouldBillboard
@@ -93,24 +91,18 @@ var ModelItemRender = createReactClass({
           castsShadow={true}
           influenceBitMask={this.props.bitMask}
           shadowNearZ={0.1}
-          shadowFarZ={
-            modelItem.shadowfarz == undefined
-              ? 6
-              : modelItem.shadowfarz * this.state.scale[0]
-          }
+          shadowFarZ={6}
           shadowOpacity={0.9}
         />
 
         {/* This ViroNode is used as a parent for 3 children - 3D Object, Particle Emitters (if present in data model) and shadows.
                 This is done so that all three children are positioned in relation to each other in the scene graph, and any touch events
                 that change their position of the object, affect all three */}
-        <ViroNode position={modelItem.position}>
+        <ViroNode position={[0, 0, 0]}>
           <Viro3DObject
-            source={modelItem.obj}
-            type={modelItem.type}
+            source={{uri: modelItem.obj_path}}
+            type={'OBJ'}
             materials={'pbr'}
-            resources={modelItem.resources}
-            animation={{...modelItem.animation, run: this.state.runAnimation}}
             lightReceivingBitMask={this.props.bitMask | 1}
             shadowCastingBitMask={this.props.bitMask}
             onClickState={this._onClickState(this.props.modelIDProps.uuid)}
@@ -121,14 +113,6 @@ var ModelItemRender = createReactClass({
             onLoadStart={this._onObjectLoadStart(this.props.modelIDProps.uuid)}
             onLoadEnd={this._onObjectLoadEnd(this.props.modelIDProps.uuid)}
           />
-
-          {/* Some of the objects (Birthcake and Angry Emoji)
-                  also have Particle Emitters that are rendered with them (configured in data model with prop "emitter_name".
-                  For those, we add corresponding particle emitters identified by the modelName*/}
-          {renderIf(
-            this.state.showParticles && modelItem.emitter_name !== undefined,
-            <ParticleEmitter modelName={modelItem.name} />,
-          )}
         </ViroNode>
 
         {/* The surface used to render shadow below the object. Below we OR the light bitmask with 1 on the object because the default bitmask for lights
@@ -296,7 +280,7 @@ var ModelItemRender = createReactClass({
 
     // try to find a more informed position via the hit test results
     if (results.length > 0) {
-      let hitResultPosition = undefined;
+      let hitResultPosition;
       // Go through all the hit test results, and find the first AR Point that's close to the position returned by the AR Hit Test
       // We'll place our object at that first point
       for (var i = 0; i < results.length; i++) {
@@ -375,4 +359,10 @@ ViroMaterials.createMaterials({
   },
 });
 
-module.exports = ModelItemRender;
+function selectProps(store) {
+  return {
+    allModels: store.arobjects.allModels,
+  };
+}
+
+module.exports = connect(selectProps)(ModelItemRender);

@@ -12,7 +12,6 @@ import {View, Image, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import Animation from 'lottie-react-native';
-import renderIf from '../helpers/renderIf';
 import SuccessAnimation from './SuccessAnimation';
 
 /**
