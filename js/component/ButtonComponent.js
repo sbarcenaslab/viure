@@ -62,6 +62,7 @@ class ButtonComponent extends Component {
       this.fadeInValue.setValue(0);
     }
   }
+
   _onPress() {
     if (this.props.buttonState === 'off') {
       this.scale();

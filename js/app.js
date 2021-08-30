@@ -918,8 +918,8 @@ export class App extends Component {
     let contentType =
       this.state.previewType == kPreviewTypeVideo ? 'video/mp4' : 'image/png';
     await Share.open({
-      subject: '#FigmentAR',
-      message: '#FigmentAR',
+      subject: '',
+      message: 'Viure image =)',
       url: this.state.videoUrl,
       type: contentType,
     });
